@@ -1,0 +1,9 @@
+numpy
+pandas
+scipy
+scikit-learn
+requests
+# semantic-diff metric + dual-encoder (GPU recommended)
+torch
+transformers
+sentence-transformers
