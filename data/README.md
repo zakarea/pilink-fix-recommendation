@@ -1,7 +1,11 @@
 # Data
 
-The datasets are too large for the git repository (the Android base file alone is
-~484 MB, above GitHub's 100 MB per-file limit). Obtain them as follows.
+The ground-truth **issue–PR links** for both datasets are included directly in
+this repo under [`links/`](links/) (small CSVs, `issue_repo, issue_url, pr_url`)
+so reviewers can inspect them without any download. The **full** datasets (issue
+and PR text, changed files, diff hunks) are too large for git (the Android base
+file alone is ~484 MB, above GitHub's 100 MB per-file limit); obtain them as
+follows.
 
 ## 1. Base dataset (PI-Link, Android partition)
 
