@@ -9,7 +9,7 @@ in `../../code/` (`fetch_pr_files.py`, `collect_issue_pr_dataset.py`).
 | File | Pairs | Issues | Projects |
 |---|---|---|---|
 | `android_issue_pr_links.csv` | 34,433 | 27,098 | 5,741 |
-| `python_issue_pr_links.csv`  | (generate — see below) | | |
+| `python_issue_pr_links.csv`  | 34,697 | 34,697 | 784 |
 
 Columns: `issue_repo, issue_url, pr_url` (one row per issue–PR pair; an issue with
 several linked PRs spans several rows).
