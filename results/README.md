@@ -29,6 +29,25 @@ discriminative. nSemSim is 0 for a random fix, 1 for the oracle-closest pool fix
 The ordering (Dual > Hybrid > TF–IDF > BM25) is **identical** across rank-based,
 fix-text, change-type, and semantic-code metrics — four independent lenses agree.
 
+## LLM-scale embedding baseline (E5-large, 335M, zero-shot) — full Android set
+
+A zero-shot instruction-tuned embedder does **not** beat the cheap baselines; a
+fine-tuned 22M dual-encoder (15× smaller) far exceeds it — task adaptation, not
+scale, is what matters on identifier-heavy software text.
+
+| Model | Hit@1 | Hit@10 | MRR | CJac@1 |
+|---|---|---|---|---|
+| TF–IDF | 0.116 | 0.388 | 0.199 | 0.205 |
+| Hybrid | 0.134 | 0.412 | 0.219 | 0.214 |
+| E5-large (zero-shot, 335M) | 0.091 | 0.286 | 0.151 | **0.229** |
+| Dual-encoder (fine-tuned, 22M) | **0.207** | **0.503** | **0.299** | 0.214 |
+
+Run it with:
+```bash
+EMBED_MODEL=intfloat/e5-large-v2 EMBED_QUERY_PREFIX="query: " EMBED_DOC_PREFIX="passage: " \
+  python code/pilink_fix_model.py --data <android>.json --files pr_files.jsonl --models tfidf,hybrid,embed
+```
+
 ## Coverage vs. conditional precision (Android, Hybrid)
 
 "Answerable" = the pool contains a fix textually close to the true fix (Oracle
