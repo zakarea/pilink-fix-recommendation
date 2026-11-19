@@ -378,13 +378,20 @@ def build_models(names, iss_tr, prs_tr, issues, seed):
             # Salesforce/codet5p-110m-embedding). Code models may need trust_remote_code,
             # and raw HF models get a mean-pooling head from sentence-transformers.
             name = os.environ.get("EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+            # Instruction-tuned / LLM-scale embedders (e5, bge, gte, e5-mistral) need
+            # a query and a document prefix or they underperform badly. Set them per
+            # model, e.g. EMBED_QUERY_PREFIX="query: " EMBED_DOC_PREFIX="passage: ".
+            qp = os.environ.get("EMBED_QUERY_PREFIX", "")
+            dp = os.environ.get("EMBED_DOC_PREFIX", "")
+            bs = int(os.environ.get("EMBED_BATCH", "128"))
             try:
                 st = SentenceTransformer(name, trust_remote_code=True)
             except TypeError:
                 st = SentenceTransformer(name)
             label = f"Embeddings ({name.split('/')[-1]})"
-            E = st.encode(cand_issue_text, batch_size=128, normalize_embeddings=True, show_progress_bar=True)
-            models[label] = lambda Q: st.encode(list(Q), batch_size=128,
+            E = st.encode([dp + t for t in cand_issue_text], batch_size=bs,
+                          normalize_embeddings=True, show_progress_bar=True)
+            models[label] = lambda Q: st.encode([qp + t for t in Q], batch_size=bs,
                                                  normalize_embeddings=True) @ E.T
         except Exception as e:
             print(f"[skip embed] {e}")
